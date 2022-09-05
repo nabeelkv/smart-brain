@@ -5,6 +5,8 @@ import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Rank from './components/Rank/Rank';
+import Signin from './Signin/Signin';
+import Register from './Register/Register';
 
 class App extends Component {
   constructor() {
@@ -12,7 +14,8 @@ class App extends Component {
     this.state = {
       input: '',
       imageUrl: '',
-      box: {}
+      box: {},
+      route: 'signin'
     }
   }
   
@@ -46,14 +49,25 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
+  onRouteChange = () => {
+    this.setState({route: 'home'});
+  }
+
   render() {
     return (
       <div className="App">
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm inputChange={this.onInputChange} buttonSubmit={this.onButtonSubmit}/>
-        <FaceRecognition image={this.state.imageUrl} box={this.state.box}/>
+      <Navigation />
+      { this.state.route === 'signin'
+       ? 
+        <Signin onRouteChange={this.onRouteChange} />
+       :
+        <div>
+          <Logo />
+          <Rank />
+          <ImageLinkForm inputChange={this.onInputChange} buttonSubmit={this.onButtonSubmit}/>
+          <FaceRecognition image={this.state.imageUrl} box={this.state.box}/>
+        </div>
+    }
       </div>
     );
   }

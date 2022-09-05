@@ -1,5 +1,4 @@
 import React from "react";
-import 'tachyons';
 import './ImageLinkForm.css'
 
 const ImageLinkForm = ({inputChange, buttonSubmit}) => {

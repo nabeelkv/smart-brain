@@ -11,10 +11,28 @@ class App extends Component {
     super()
     this.state = {
       input: '',
-      imageUrl: ''
+      imageUrl: '',
+      box: {}
     }
   }
   
+  calculateFaceLocation = (data) => {
+    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('input-image');
+    const width = Number(image.width);
+    const height = Number(image.height);
+    return {
+      leftCol: clarifaiFace.left_col * width,
+      topRow: clarifaiFace.top_row * height,
+      rightCol: width - (clarifaiFace.right_col * width),
+      bottomRow: height - (clarifaiFace.bottom_row * height)
+    }
+  }
+
+  displayFaceBox = (box) => {
+    this.setState({box: box});
+  }
+
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
@@ -24,9 +42,10 @@ class App extends Component {
     // Clarifi API Request
       fetch('https://nabeelkv.github.io/jsonplaceholder/face-detection')
       .then(response => response.json())
-      .then(users => {console.log(users.outputs[0].data.regions[0].region_info.bounding_box)});
+      .then(users => this.displayFaceBox(this.calculateFaceLocation(users)))
+      .catch(err => console.log(err));
   }
-  
+
   render() {
     return (
       <div className="App">
@@ -34,7 +53,7 @@ class App extends Component {
         <Logo />
         <Rank />
         <ImageLinkForm inputChange={this.onInputChange} buttonSubmit={this.onButtonSubmit}/>
-        <FaceRecognition image={this.state.imageUrl}/>
+        <FaceRecognition image={this.state.imageUrl} box={this.state.box}/>
       </div>
     );
   }

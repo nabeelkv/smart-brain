@@ -29,14 +29,15 @@ const Signin = ({ onRouteChange }) => {
             </fieldset>
             <div className="">
               <input
-                onClick={onRouteChange}
+                onClick={() => onRouteChange('home')}
                 className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
                 type="submit"
                 value="Sign in"
               />
             </div>
             <div className="lh-copy mt3">
-              <p className="f6 link dim black db pointer">Register</p>
+              <p onClick={() => onRouteChange('register')}
+               className="f6 link dim black db pointer">Register</p>
             </div>
           </div>
         </main>
